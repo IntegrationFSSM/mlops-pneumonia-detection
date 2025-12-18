@@ -1,0 +1,2 @@
+# Add patterns of DVC cache files to .gitignore
+/cache

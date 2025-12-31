@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card" style="text-align: center;">
+    <h1>🏥 Détection de Pneumonie par IA</h1>
+    <p style="font-size: 18px; color: #666; margin: 20px 0;">
+        Uploadez une radiographie thoracique pour détecter la pneumonie grâce à l'Intelligence Artificielle
+    </p>
+    <a href="{% url 'upload' %}" class="btn">Commencer l'Analyse</a>
+
+    <div style="margin-top: 40px; text-align: left;">
+        <h2>📊 Projet MLOps Complet</h2>
+        <ul>
+            <li>✅ <strong>Modèle</strong>: ResNet18 (Transfer Learning)</li>
+            <li>✅ <strong>Framework</strong>: PyTorch</li>
+            <li>✅ <strong>Orchestration</strong>: Apache Airflow</li>
+            <li>✅ <strong>Tracking</strong>: MLflow</li>
+            <li>✅ <strong>Versioning</strong>: Git + DVC</li>
+            <li>✅ <strong>Infrastructure</strong>: Docker Compose</li>
+            <li>✅ <strong>Web Interface</strong>: Django</li>
+            <li>✅ <strong>Déploiement</strong>: Heroku (Production-Ready)</li>
+        </ul>
+    </div>
+
+    <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 10px; text-align: left;">
+        <h3>👨‍🎓 Projet Académique</h3>
+        <p><strong>Étudiant</strong>: Yassine</p>
+        <p><strong>Objectif</strong>: Démonstration d'un pipeline MLOps complet de bout en bout</p>
+        <p><strong>Technologies</strong>: Python, Django, PyTorch, Docker, Airflow, MLflow, Heroku</p>
+    </div>
+</div>
+{% endblock %}

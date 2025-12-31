@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <h1>📊 Résultat de l'Analyse</h1>
+
+    <div class="grid-2">
+        <div>
+            <h3>Image Analysée</h3>
+            <img src="{{ image_url }}" alt="Radiographie">
+        </div>
+
+        <div>
+            <h3>Prédiction du Modèle</h3>
+            <div
+                class="result-box {% if prediction == 'PNEUMONIA' %}result-pneumonia{% else %}result-normal{% endif %}">
+                <h2>{{ prediction }}</h2>
+                <p style="font-size: 18px; margin-top: 10px;">Confiance: {{ confidence }}%</p>
+            </div>
+
+            <h3 style="margin-top: 20px;">Probabilités Détaillées</h3>
+
+            <div style="margin: 15px 0;">
+                <p><strong>NORMAL</strong>: {{ probabilities.NORMAL|floatformat:2 }}%</p>
+                <div class="progress-bar">
+                    <div class="progress-fill progress-normal" style="width: {{ probabilities.NORMAL }}%;"></div>
+                </div>
+            </div>
+
+            <div style="margin: 15px 0;">
+                <p><strong>PNEUMONIA</strong>: {{ probabilities.PNEUMONIA|floatformat:2 }}%</p>
+                <div class="progress-bar">
+                    <div class="progress-fill progress-pneumonia" style="width: {{ probabilities.PNEUMONIA }}%;"></div>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <a href="{% url 'upload' %}" class="btn">🔄 Nouvelle Analyse</a>
+                <a href="{% url 'index' %}" class="btn" style="background: #6c757d; margin-left: 10px;">🏠 Accueil</a>
+            </div>
+        </div>
+    </div>
+
+    <div
+        style="margin-top: 30px; padding: 15px; background: #d1ecf1; border-left: 4px solid #0c5460; border-radius: 5px;">
+        <strong>ℹ️ Information</strong>: Cette prédiction est générée par un modèle ResNet18 entraîné sur le dataset
+        Chest X-Ray Images.
+        Le modèle a été tracké avec MLflow et déployé via ce pipeline MLOps complet.
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card">
+    <h1>📤 Upload Radiographie</h1>
+    <p style="color: #666; margin-bottom: 20px;">
+        Sélectionnez une radiographie thoracique (format JPG ou PNG) pour analyse
+    </p>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div style="margin: 20px 0;">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn">🔍 Analyser</button>
+        <a href="{% url 'index' %}" class="btn" style="background: #6c757d; margin-left: 10px;">← Retour</a>
+    </form>
+
+    <div
+        style="margin-top: 30px; padding: 15px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 5px;">
+        <strong>ℹ️ Note</strong>: Cette démo utilise une simulation de prédiction pour montrer l'interface.
+        En production, le modèle PyTorch entraîné avec MLflow serait chargé ici.
+    </div>
+</div>
+{% endblock %}

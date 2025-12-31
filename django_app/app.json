@@ -1,0 +1,18 @@
+{
+  "name": "Pneumonia Detection ML",
+  "description": "MLOps Pipeline for Pneumonia Detection",
+  "keywords": ["python", "django", "mlops", "machine-learning"],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ],
+  "env": {
+    "DEBUG": {
+      "value": "False"
+    },
+    "SECRET_KEY": {
+      "generator": "secret"
+    }
+  }
+}

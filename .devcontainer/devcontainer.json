@@ -1,8 +1,11 @@
 {
     "name": "MLOps Pneumonia Detection",
-    "image": "mcr.microsoft.com/devcontainers/python:3.10",
+    "image": "mcr.microsoft.com/devcontainers/python:3.10-bookworm",
     "features": {
-        "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {
+            "moby": false,
+            "dockerDashComposeVersion": "v2"
+        },
         "ghcr.io/devcontainers/features/git:1": {}
     },
     "customizations": {
@@ -32,5 +35,5 @@
             "onAutoForward": "notify"
         }
     },
-    "postCreateCommand": "echo 'Codespace ready! Run: docker-compose up -d'"
+    "postCreateCommand": "pip install -r requirements.txt && echo 'Ready! Run: docker-compose up -d'"
 }

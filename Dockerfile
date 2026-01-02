@@ -13,8 +13,10 @@ USER airflow
 # Copy requirements file
 COPY requirements.txt /requirements.txt
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r /requirements.txt
+# Install Python dependencies with PyTorch CPU-only
+RUN pip install --no-cache-dir torch==2.1.2 torchvision==0.16.2 --index-url https://download.pytorch.org/whl/cpu && \
+    pip install --no-cache-dir -r /requirements.txt
 
 # Set working directory
 WORKDIR /opt/airflow
+

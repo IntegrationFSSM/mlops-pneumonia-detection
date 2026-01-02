@@ -9,7 +9,7 @@ x-airflow-common:
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     AIRFLOW__CORE__FERNET_KEY: ''
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
-    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+    AIRFLOW__CORE__LOAD_EXAMPLES: 'false'  # Désactivé pour n'avoir que NOS dags
     AIRFLOW__API__AUTH_BACKENDS: 'airflow.api.auth.backend.basic_auth'
     MLFLOW_TRACKING_URI: 'http://mlflow:5000'
   volumes:
@@ -18,7 +18,7 @@ x-airflow-common:
     - ./plugins:/opt/airflow/plugins
     - ./config:/opt/airflow/config
     - ./storage:/opt/airflow/storage
-  user: "${AIRFLOW_UID:-50000}:0"
+  user: "0:0"  # Force ROOT pour éviter les problèmes de permissions Windows
   depends_on:
     postgres:
       condition: service_healthy
@@ -42,22 +42,17 @@ services:
 
   mlflow:
     image: ghcr.io/mlflow/mlflow:v2.9.2
+    user: root
     ports:
       - "5000:5000"
-    environment:
-      BACKEND_STORE_URI: postgresql://airflow:airflow@postgres/airflow
-      ARTIFACT_ROOT: /mlflow/artifacts
     volumes:
-      - mlflow-artifacts:/mlflow/artifacts
+      - mlflow-artifacts:/mlflow
     command: >
       mlflow server
-      --backend-store-uri postgresql://airflow:airflow@postgres/airflow
+      --backend-store-uri file:///mlflow/mlruns
       --default-artifact-root /mlflow/artifacts
       --host 0.0.0.0
       --port 5000
-    depends_on:
-      postgres:
-        condition: service_healthy
     restart: always
     networks:
       - mlops-network

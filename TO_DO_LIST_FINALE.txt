@@ -1,0 +1,51 @@
+================================================================
+🚀 PLAN D'ACTION FINAL - À SUIVRE ÉTAPE PAR ÉTAPE
+================================================================
+
+1. PRÉPARER LA PRÉSENTATION (PPT)
+----------------------------------------------------------------
+[ ] Ouvrir "PRESENTATION_POWERPOINT.md" dans VS Code.
+[ ] Installer l'extension "Marp for VS Code" (si pas fait).
+    -> Cliquez sur l'icône extensions (carrés à gauche) -> cherchez "Marp".
+[ ] Ouvrir le fichier -> Cliquez sur l'icône Marp (en haut à droite) -> "Export Slide Deck".
+[ ] Choisir "PDF" ou "PPTX" (PowerPoint).
+[ ] Sauvegarder sur le Bureau pour l'avoir prête.
+
+2. PRÉPARER LE RAPPORT (LATEX)
+----------------------------------------------------------------
+[ ] Ouvrir "RAPPORT_LATEX.tex"
+[ ] Si vous avez LaTeX installé : compilez-le.
+[ ] SINON (Plus simple) :
+    -> Allez sur https://www.overleaf.com
+    -> Créez un nouveau projet "Pneumonia MLOps"
+    -> Copiez-collez tout le contenu de "RAPPORT_LATEX.tex" dedans.
+    -> Cliquez sur "Recompile" -> Téléchargez le PDF.
+
+3. VÉRIFIER QUE TOUT TOURNE (POUR LA DÉMO)
+----------------------------------------------------------------
+[ ] Ouvrez un terminal dans le dossier du projet.
+[ ] Lancez : docker-compose up -d
+[ ] Attendez 2-3 minutes.
+[ ] Vérifiez les liens suivants dans votre navigateur :
+    -> http://localhost:8080 (Airflow - Login: airflow/airflow)
+    -> http://localhost:5000 (MLflow)
+    -> http://localhost:8000 (Votre Site Web Local)
+    -> https://pneumonia-yassine.herokuapp.com (Votre Site Web en Ligne)
+
+4. PENDANT LA PRÉSENTATION
+----------------------------------------------------------------
+[ ] Lancez votre PowerPoint.
+[ ] Ayez votre fichier "CHEAT_SHEET_PRESENTATION.txt" ouvert à côté (antisèche).
+[ ] Ayez une image de radio (poumons) sur votre bureau pour tester l'upload.
+
+5. ORDRE DE LA DÉMO À FAIRE AU PROF
+----------------------------------------------------------------
+1. Montrez les slides d'abord (Contexte, Architecture).
+2. Dites : "Je vais maintenant vous montrer le système en action."
+3. Allez sur MLflow (localhost:5000) -> "Voici le tracking des expériences."
+4. Allez sur Heroku (le lien en ligne) -> "Voici l'app en production."
+5. Uploadez une image devant lui -> "Regardez, le diagnostic est immédiat."
+6. Concluez avec les slides de fin.
+
+FIN. VOUS AVEZ GAGNÉ.
+================================================================

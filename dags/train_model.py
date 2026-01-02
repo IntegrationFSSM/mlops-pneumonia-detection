@@ -16,9 +16,14 @@ import numpy as np
 from datetime import datetime
 
 
-def get_data_loaders(data_dir, batch_size=32):
+def get_data_loaders(data_dir, batch_size=32, sample_fraction=1.0):
     """
     Prépare les DataLoaders pour l'entraînement et la validation
+    
+    Args:
+        data_dir: Chemin vers les données
+        batch_size: Taille des batches
+        sample_fraction: Fraction du dataset à utiliser (0.1 = 10%, 1.0 = 100%)
     """
     # Transformations pour l'entraînement (avec augmentation)
     train_transforms = transforms.Compose([
@@ -53,12 +58,31 @@ def get_data_loaders(data_dir, batch_size=32):
         transform=val_transforms
     )
     
-    # Création des DataLoaders
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
-    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
+    # Échantillonner si sample_fraction < 1.0
+    if sample_fraction < 1.0:
+        import random
+        
+        # Train subset
+        train_size = int(len(train_dataset) * sample_fraction)
+        train_indices = random.sample(range(len(train_dataset)), train_size)
+        train_dataset = torch.utils.data.Subset(train_dataset, train_indices)
+        
+        # Val subset
+        val_size = int(len(val_dataset) * sample_fraction)
+        val_indices = random.sample(range(len(val_dataset)), val_size)
+        val_dataset = torch.utils.data.Subset(val_dataset, val_indices)
+        
+        # Test subset
+        test_size = int(len(test_dataset) * sample_fraction)
+        test_indices = random.sample(range(len(test_dataset)), test_size)
+        test_dataset = torch.utils.data.Subset(test_dataset, test_indices)
     
-    return train_loader, val_loader, test_loader, train_dataset.classes
+    # Création des DataLoaders (num_workers=0 pour éviter les problèmes de shared memory dans Docker)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=0)
+    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
+    
+    return train_loader, val_loader, test_loader, ['NORMAL', 'PNEUMONIA']
 
 
 def create_model(num_classes=2):
@@ -143,11 +167,19 @@ def validate(model, val_loader, criterion, device):
 
 
 def train(data_dir='/opt/airflow/dags/data/chest_xray', 
-          epochs=10, 
-          batch_size=32, 
-          learning_rate=0.001):
+          epochs=1,  # Changé à 1 pour démo rapide
+          batch_size=64,  # Augmenté pour plus de vitesse
+          learning_rate=0.001,
+          sample_fraction=1.0):  # NOUVEAU: fraction du dataset à utiliser
     """
     Fonction principale d'entraînement avec tracking MLflow
+    
+    Args:
+        data_dir: Chemin vers les données
+        epochs: Nombre d'epochs
+        batch_size: Taille des batches
+        learning_rate: Taux d'apprentissage
+        sample_fraction: Fraction du dataset (0.1 = 10%, 1.0 = 100%)
     """
     print("🚀 Démarrage de l'entraînement...")
     
@@ -168,10 +200,13 @@ def train(data_dir='/opt/airflow/dags/data/chest_xray',
         mlflow.log_param("learning_rate", learning_rate)
         mlflow.log_param("optimizer", "Adam")
         mlflow.log_param("device", str(device))
+        mlflow.log_param("sample_fraction", sample_fraction)  # NOUVEAU
         
         # Chargement des données
         print("📊 Chargement des données...")
-        train_loader, val_loader, test_loader, classes = get_data_loaders(data_dir, batch_size)
+        train_loader, val_loader, test_loader, classes = get_data_loaders(
+            data_dir, batch_size, sample_fraction  # NOUVEAU paramètre
+        )
         print(f"   Classes: {classes}")
         print(f"   Train samples: {len(train_loader.dataset)}")
         print(f"   Val samples: {len(val_loader.dataset)}")
